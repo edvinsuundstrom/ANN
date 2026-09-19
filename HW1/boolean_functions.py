@@ -1,4 +1,5 @@
 import itertools
+
 import numpy as np
 
 
@@ -8,12 +9,14 @@ def train_perceptron(eta, target, input, output, weights, theta):
     return weights, theta
 
     # sgn function, if 0 value is set to 1
+
+
 def sgn(value):
     return 1 if value >= 0 else -1
 
 
 def mcculloch_pitts(weights, input, theta):
-    bm = np.dot(weights, input) - theta #bm is the neurons local field
+    bm = np.dot(weights, input) - theta  # bm is the neurons local field
     output = sgn(bm)
     return output
 
@@ -36,7 +39,7 @@ def linearly_separable(inputs, target, weights, theta):
     return True
 
 
-dimensions = [2,3,4,5]
+dimensions = [2, 3, 4, 5]
 epochs = 20
 eta = 0.05
 sample_size = 10000
@@ -44,10 +47,9 @@ theta = 0
 trials = 20
 
 for n in dimensions:
-
     no_of_functions = 2 ** (2**n)
 
-    #known number of linearly separable functions
+    # known number of linearly separable functions
     if n == 2:
         actual_no_of_separable = 14
     elif n == 3:
@@ -67,7 +69,9 @@ for n in dimensions:
                 weights = np.random.normal(loc=0.0, scale=np.sqrt(1 / n), size=n)
                 theta = 0
                 for iterations in range(epochs):
-                    for pattern, t in zip(inputs, target):  # train once for every input output pair
+                    for pattern, t in zip(
+                        inputs, target
+                    ):  # train once for every input output pair
                         output = mcculloch_pitts(weights, pattern, theta)
                         weights, theta = train_perceptron(
                             eta, t, pattern, output, weights, theta
@@ -83,17 +87,23 @@ for n in dimensions:
         for trial in range(trials):
             separable = 0
             for sample_function in range(sample_size):
-                target = np.random.choice([-1, 1], size=2**n)  # generate random target vector
+                target = np.random.choice(
+                    [-1, 1], size=2**n
+                )  # generate random target vector
                 weights = np.random.normal(loc=0.0, scale=np.sqrt(1 / n), size=n)
-                theta = 0 
+                theta = 0
                 for iterations in range(epochs):
-                    for pattern, t in zip(inputs, target):  # train once for every input output pair
+                    for pattern, t in zip(
+                        inputs, target
+                    ):  # train once for every input output pair
                         output = mcculloch_pitts(weights, pattern, theta)
-                        weights, theta = train_perceptron(eta, t, pattern, output, weights, theta)
+                        weights, theta = train_perceptron(
+                            eta, t, pattern, output, weights, theta
+                        )
                     if linearly_separable(inputs, target, weights, theta):
                         separable += 1
-                        break 
-            fraction_separable = separable / (sample_size) 
+                        break
+            fraction_separable = separable / (sample_size)
             fraction_list.append(fraction_separable)
 
     average_fraction = np.mean(fraction_list)
